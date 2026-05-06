@@ -1,0 +1,18 @@
+[
+  {
+    "id": "q1",
+    "question": "What is RAG and why is it useful?"
+  },
+  {
+    "id": "q2",
+    "question": "Describe a typical RAG pipeline in 4-5 steps."
+  },
+  {
+    "id": "q3",
+    "question": "What are pros and cons of TF-IDF retrieval for a RAG demo?"
+  },
+  {
+    "id": "q4",
+    "question": "How should an assistant respond when the retrieved context is insufficient?"
+  }
+]
