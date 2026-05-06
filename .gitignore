@@ -22,4 +22,3 @@ ENV/
 
 *.log
 
-eval_set/*_results.json
