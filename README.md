@@ -5,11 +5,19 @@ A Streamlit application that turns pasted meeting notes into structured action i
 
 ## Demo video
 
-**Placeholder — replace with your recording after upload:**
-
-`[Your demo video](https://youtu.be/CzR-a1z8h44)`
+**Demo video:** [Meeting Notes → Action Items Assistant (Streamlit Demo)](https://youtu.be/CzR-a1z8h44)
 
 ---
+
+## Preface
+
+In some product teams, they have many meetings every week, but turning messy meeting notes into clear, actionable items is time-consuming. My goal is to transform chaotic raw notes into structured, reliable action items quickly.
+
+I built a clean Streamlit web application that combines three key techniques:
+
+- **Advanced prompt engineering** with few-shot examples and Chain-of-Thought
+- **A small RAG knowledge base** to ensure consistent formatting and team standards
+- **Strong governance features**, including confidence scoring and automatic human-review flags
 
 ## 1. Context, user, and problem
 
