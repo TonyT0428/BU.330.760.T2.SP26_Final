@@ -7,7 +7,7 @@ A Streamlit application that turns pasted meeting notes into structured action i
 
 **Placeholder — replace with your recording after upload:**
 
-`[Your demo video](https://www.youtube.com/watch?v=REPLACE_WITH_VIDEO_ID)`
+`[Your demo video](https://youtu.be/CzR-a1z8h44)`
 
 ---
 
