@@ -15,6 +15,7 @@ build/
 
 .env
 .env.*
+.streamlit/
 
 .venv/
 venv/

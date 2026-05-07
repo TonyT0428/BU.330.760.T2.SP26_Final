@@ -1,169 +1,178 @@
-from __future__ import annotations
-
 import json
-import os
-import re
-from dataclasses import dataclass
-from pathlib import Path
 
-import numpy as np
 import streamlit as st
-from sklearn.feature_extraction.text import TfidfVectorizer
 
-from prompts import build_messages_baseline, build_messages_improved
-
-
-ROOT = Path(__file__).resolve().parent
-KB_DIR = ROOT / "knowledge_base"
-EVAL_DIR = ROOT / "eval_set"
-
-
-@dataclass(frozen=True)
-class Chunk:
-    source: str
-    text: str
-
-
-def _read_markdown_files(kb_dir: Path) -> list[Chunk]:
-    chunks: list[Chunk] = []
-    for p in sorted(kb_dir.glob("*.md")):
-        raw = p.read_text(encoding="utf-8")
-        parts = [s.strip() for s in re.split(r"\n\s*\n+", raw) if s.strip()]
-        for part in parts:
-            chunks.append(Chunk(source=p.name, text=part))
-    return chunks
-
-
-@st.cache_resource(show_spinner=False)
-def _build_index() -> tuple[list[Chunk], TfidfVectorizer, np.ndarray]:
-    kb_dir = KB_DIR
-    if not kb_dir.exists():
-        kb_dir.mkdir(parents=True, exist_ok=True)
-
-    chunks = _read_markdown_files(kb_dir)
-    if not chunks:
-        chunks = [
-            Chunk(
-                source="(empty)",
-                text="No knowledge base documents found. Add .md files under knowledge_base/.",
-            )
-        ]
-
-    vectorizer = TfidfVectorizer(stop_words="english")
-    matrix = vectorizer.fit_transform([c.text for c in chunks]).toarray().astype(np.float32)
-    return chunks, vectorizer, matrix
-
-
-def retrieve(query: str, top_k: int = 4) -> list[tuple[Chunk, float]]:
-    chunks, vectorizer, matrix = _build_index()
-    q = vectorizer.transform([query]).toarray().astype(np.float32)[0]
-    denom = (np.linalg.norm(matrix, axis=1) * (np.linalg.norm(q) + 1e-8)) + 1e-8
-    sims = (matrix @ q) / denom
-    idx = np.argsort(-sims)[:top_k]
-    return [(chunks[i], float(sims[i])) for i in idx]
-
-
-def format_context(hits: list[tuple[Chunk, float]]) -> str:
-    blocks: list[str] = []
-    for c, score in hits:
-        blocks.append(f"[{c.source} | score={score:.3f}]\n{c.text}")
-    return "\n\n---\n\n".join(blocks)
-
-
-def try_openai_chat(messages: list[dict[str, str]]) -> str | None:
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        return None
-
-    try:
-        from openai import OpenAI  # type: ignore
-
-        client = OpenAI(api_key=api_key)
-        resp = client.chat.completions.create(
-            model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini"),
-            messages=messages,
-            temperature=0.2,
-        )
-        return resp.choices[0].message.content or ""
-    except Exception as e:  # noqa: BLE001
-        return f"(OpenAI call failed: {e})"
-
-
-def heuristic_answer(question: str, context: str) -> str:
-    # Simple offline fallback: return a short extractive answer from the retrieved context.
-    sents = re.split(r"(?<=[.!?])\s+", re.sub(r"\s+", " ", context.strip()))
-    sents = [s.strip() for s in sents if len(s.strip()) >= 20]
-    if not sents:
-        return "I couldn't find relevant context in the knowledge base. Add documents under knowledge_base/."
-    return "Based on the retrieved context, here are the most relevant snippets:\n\n- " + "\n- ".join(
-        sents[:5]
-    )
-
-
-def load_eval_inputs() -> list[dict]:
-    p = EVAL_DIR / "inputs.json"
-    if not p.exists():
-        return []
-    return json.loads(p.read_text(encoding="utf-8"))
+from config import get_groq_api_key
+from prompts import generate_action_items, retrieve_context
 
 
 def main() -> None:
-    st.set_page_config(page_title="RAG Demo (Streamlit)", layout="wide")
-    st.title("RAG Demo (Streamlit)")
-    st.caption("Baseline vs Improved (RAG + few-shot). Uses OpenAI if `OPENAI_API_KEY` is set; otherwise runs offline.")
+    st.set_page_config(
+        page_title="Meeting Notes → Action Items Assistant",
+        page_icon="📋",
+        layout="wide",
+        initial_sidebar_state="expanded",
+    )
 
     with st.sidebar:
-        st.header("Settings")
-        mode = st.radio("Mode", ["Improved (RAG + few-shot)", "Baseline"], index=0)
-        top_k = st.slider("Top-K retrieved chunks", 1, 8, 4)
-        show_context = st.checkbox("Show retrieved context", value=True)
-
+        st.title("Meeting Notes → Action Items Assistant")
+        st.write(
+            "Paste raw meeting notes, then generate a structured list of action items "
+            "(task, assignee, deadline, priority)."
+        )
+        if not get_groq_api_key():
+            st.warning("GROQ_API_KEY is not set. Add it to a local `.env` file to enable generation.")
         st.divider()
-        st.subheader("Eval set")
-        eval_items = load_eval_inputs()
-        if eval_items:
-            picked = st.selectbox(
-                "Pick a sample input",
-                options=list(range(len(eval_items))),
-                format_func=lambda i: f"{eval_items[i].get('id', i)}: {eval_items[i].get('question','')[:60]}",
-            )
-            sample_q = eval_items[picked].get("question", "")
-            if st.button("Use this question"):
-                st.session_state["question"] = sample_q
-        else:
-            st.info("No eval inputs found. See eval_set/inputs.json.")
+        st.caption("Governance")
+        low_conf_threshold = st.slider(
+            "Low-confidence threshold",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.6,
+            step=0.05,
+        )
+        st.divider()
+        st.caption("RAG")
+        show_context = st.checkbox(
+            "Show retrieved context after generation",
+            value=False,
+            help="Displays TF–IDF chunks from knowledge_base/ used to steer the model.",
+        )
 
-    question = st.text_area("Question", value=st.session_state.get("question", ""), height=110)
-    go = st.button("Run")
+    st.title("Meeting Notes → Action Items Assistant")
+    st.caption(
+        "Generate structured action items, then review, edit, and finalize before use. "
+        "See GOVERNANCE.md for when human judgment is required."
+    )
 
-    if not go:
+    st.subheader("Paste meeting notes")
+    notes = st.text_area(
+        "Meeting notes",
+        placeholder="Paste your notes here (bullets, transcript snippets, Zoom summary, etc.)",
+        height=280,
+        label_visibility="collapsed",
+    )
+
+    generate = st.button("Generate Action Items", type="primary", use_container_width=True)
+
+    st.divider()
+    st.subheader("Action Items (results)")
+
+    if not generate:
+        st.info("Click **Generate Action Items** to see results here.")
         st.stop()
 
-    hits = retrieve(question, top_k=top_k)
-    context = format_context(hits)
+    if not notes.strip():
+        st.warning("Please paste meeting notes first.")
+        st.stop()
 
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        st.subheader("Answer")
-        if mode.startswith("Baseline"):
-            messages = build_messages_baseline(question)
-            llm = try_openai_chat(messages)
-            st.write(llm if llm is not None else heuristic_answer(question, context=""))
-        else:
-            messages = build_messages_improved(question, context=context)
-            llm = try_openai_chat(messages)
-            st.write(llm if llm is not None else heuristic_answer(question, context=context))
+    with st.spinner("Generating action items..."):
+        try:
+            result = generate_action_items(notes)
+        except Exception as e:  # noqa: BLE001
+            st.error(str(e))
+            st.stop()
 
-    with col2:
-        st.subheader("Retrieval")
-        for c, score in hits:
-            st.markdown(f"**{c.source}**  \nscore={score:.3f}")
-            st.code(c.text, language="markdown")
+    action_items = result.get("action_items", [])
+    if not isinstance(action_items, list):
+        st.error("Model output missing `action_items` list. Please try again.")
+        st.stop()
 
-        if show_context:
-            st.divider()
-            st.subheader("Context (as sent to improved prompt)")
-            st.code(context, language="markdown")
+    if not action_items:
+        st.info("No action items detected.")
+        st.stop()
+
+    if show_context:
+        ctx = retrieve_context(notes)
+        with st.expander("Retrieved context (RAG)", expanded=bool(ctx.strip())):
+            if ctx.strip():
+                st.code(ctx, language="markdown")
+            else:
+                st.caption("No chunks scored above the minimum similarity threshold.")
+
+    edited_items: list[dict] = []
+    low_conf_count = 0
+
+    st.subheader("Review & edit")
+    st.caption(
+        "Adjust fields as needed. Check **Reviewed** for every row before finalizing—especially items flagged as low confidence."
+    )
+    for i, item in enumerate(action_items, start=1):
+        conf = float(item.get("confidence", 0.0) or 0.0)
+        is_low = conf < low_conf_threshold
+        if is_low:
+            low_conf_count += 1
+
+        with st.container(border=True):
+            cols = st.columns([2, 1, 1, 1])
+            cols[0].markdown(f"**Item {i}**")
+            cols[1].markdown(f"**Confidence:** {conf:.2f}")
+            cols[2].markdown(f"**Priority:** {item.get('priority', '')}")
+            if is_low:
+                cols[3].warning("Low confidence")
+            else:
+                cols[3].success("OK")
+
+            task = st.text_input("Task", value=str(item.get("task", "")), key=f"task_{i}")
+            assignee = st.text_input(
+                "Assignee", value=str(item.get("assignee", "")), key=f"assignee_{i}"
+            )
+            deadline = st.text_input(
+                "Deadline (YYYY-MM-DD or None)",
+                value=str(item.get("deadline", "")),
+                key=f"deadline_{i}",
+            )
+            pr = str(item.get("priority", "Medium"))
+            if pr not in ["High", "Medium", "Low"]:
+                pr = "Medium"
+            priority = st.selectbox(
+                "Priority",
+                options=["High", "Medium", "Low"],
+                index=["High", "Medium", "Low"].index(pr),
+                key=f"priority_{i}",
+            )
+            reviewed = st.checkbox(
+                "Reviewed",
+                value=not is_low,
+                key=f"reviewed_{i}",
+                help="Low-confidence items must be reviewed before finalizing.",
+            )
+
+        edited_items.append(
+            {
+                "task": task.strip(),
+                "assignee": assignee.strip() or "Unassigned",
+                "deadline": deadline.strip() or "None",
+                "priority": priority,
+                "confidence": conf,
+                "reviewed": reviewed,
+            }
+        )
+
+    st.divider()
+    st.subheader("Finalize")
+    reviewed_ok = all(bool(x.get("reviewed")) for x in edited_items)
+    if low_conf_count:
+        st.info(f"{low_conf_count} item(s) are below the confidence threshold and require review.")
+
+    acknowledge = st.checkbox("I confirm I manually reviewed the action items.")
+    if not (reviewed_ok and acknowledge):
+        st.warning("Please review flagged items and confirm manual review to finalize.")
+        st.stop()
+
+    final_payload = {
+        "action_items": [{k: v for k, v in it.items() if k != "reviewed"} for it in edited_items]
+    }
+    st.success("Ready to export — copy JSON below or download the file.")
+    st.json(final_payload)
+    st.download_button(
+        label="Download action_items.json",
+        data=json.dumps(final_payload, ensure_ascii=False, indent=2),
+        file_name="action_items.json",
+        mime="application/json",
+        type="primary",
+        use_container_width=True,
+    )
 
 
 if __name__ == "__main__":

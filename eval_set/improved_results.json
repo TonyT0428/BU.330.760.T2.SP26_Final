@@ -1,2 +1,341 @@
-
-
+[
+  {
+    "id": "m1",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Weekly product sync (Mon):\n- Alex to send the revised Q2 roadmap deck to the client.\n- Priya will follow up with Legal about the contract redlines.\n- Decision: ship v1 without SSO.\n- Reminder: add a slide on pricing tiers.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Send the revised Q2 roadmap deck to the client",
+          "assignee": "Alex",
+          "deadline": "None",
+          "priority": "High",
+          "confidence": 0.8
+        },
+        {
+          "task": "Follow up with Legal about the contract redlines",
+          "assignee": "Priya",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.75
+        },
+        {
+          "task": "Add a slide on pricing tiers",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.5
+        }
+      ]
+    }
+  },
+  {
+    "id": "m2",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Sprint planning:\n• We need the onboarding email copy updated.\n• Jordan: I'll take the database migration.\n• Target date for beta: 2026-05-20.\n• Someone should ping Design about missing icons.\n• Nice to have: explore adding a dark mode toggle.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Update the onboarding email copy",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.55
+        },
+        {
+          "task": "Complete the database migration",
+          "assignee": "Jordan",
+          "deadline": "None",
+          "priority": "High",
+          "confidence": 0.7
+        },
+        {
+          "task": "Ping Design about missing icons",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Low",
+          "confidence": 0.45
+        },
+        {
+          "task": "Explore adding a dark mode toggle",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Low",
+          "confidence": 0.4
+        }
+      ]
+    }
+  },
+  {
+    "id": "m3",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Customer call recap:\n- They reported crashes on iOS 17.2 when uploading.\n- Mia will open a bug and assign it to the mobile team.\n- Ken: can you draft a status update to send today?\n- Customer asked about SSO timeline; we said TBD.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Open a bug for iOS 17.2 upload crashes and assign it to the mobile team",
+          "assignee": "Mia",
+          "deadline": "None",
+          "priority": "High",
+          "confidence": 0.8
+        },
+        {
+          "task": "Draft a customer status update and send it today",
+          "assignee": "Ken",
+          "deadline": "None",
+          "priority": "High",
+          "confidence": 0.7
+        }
+      ]
+    }
+  },
+  {
+    "id": "m4",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Project meeting:\nTom will update the risk register.\nLet's aim to finalize requirements by end of month.\nReminder: budget review next Tuesday.\nWe discussed vendor options (A vs B) but no decision.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Update the risk register",
+          "assignee": "Tom",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.8
+        },
+        {
+          "task": "Finalize requirements",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.4
+        }
+      ]
+    }
+  },
+  {
+    "id": "m5",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Marketing standup:\n- Sara to publish the landing page edits.\n- Need to confirm webinar speaker lineup.\n- Follow up with Finance for Q3 spend approval.\n- Note: impressions are down week-over-week.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Publish the landing page edits",
+          "assignee": "Sara",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.8
+        },
+        {
+          "task": "Confirm webinar speaker lineup",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.55
+        },
+        {
+          "task": "Follow up with Finance for Q3 spend approval",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.6
+        }
+      ]
+    }
+  },
+  {
+    "id": "m6",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Engineering triage:\n- Bug: API returns 500 for /checkout when cart has >50 items.\n- Chen will investigate root cause.\n- Assign QA to add a regression test.\n- If we can, ship the fix ASAP.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Investigate the root cause of the API 500 error for /checkout with >50 items",
+          "assignee": "Chen",
+          "deadline": "None",
+          "priority": "High",
+          "confidence": 0.85
+        },
+        {
+          "task": "Assign QA to add a regression test for the API 500 error",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.6
+        },
+        {
+          "task": "Ship the fix for the API 500 error",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "High",
+          "confidence": 0.7
+        }
+      ]
+    }
+  },
+  {
+    "id": "m7",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Design review:\n- Update the settings screen copy to match the new terminology.\n- Add missing error states for the payment form.\n- We liked option B overall.\n- Someone should schedule a follow-up with PM + Design.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Update the settings screen copy to match the new terminology",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.6
+        },
+        {
+          "task": "Add missing error states for the payment form",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.6
+        },
+        {
+          "task": "Schedule a follow-up with PM + Design",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Low",
+          "confidence": 0.4
+        }
+      ]
+    }
+  },
+  {
+    "id": "m8",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Partnership meeting:\n- Send the draft MOU to the partner.\n- Ask partner for their data schema.\n- Evaluate whether we can support daily file drops.\n- Next check-in in two weeks.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Send the draft MOU to the partner",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.6
+        },
+        {
+          "task": "Ask partner for their data schema",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.6
+        },
+        {
+          "task": "Evaluate whether we can support daily file drops",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.6
+        }
+      ]
+    }
+  },
+  {
+    "id": "m9",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Ops sync:\n- Rotate on-call schedule for June.\n- Investigate why deploys are taking 25+ minutes.\n- Reminder: patching window this weekend.\n- Great job on incident response last week.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Rotate the on-call schedule for June",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.55
+        },
+        {
+          "task": "Investigate why deploys are taking 25+ minutes",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.55
+        }
+      ]
+    }
+  },
+  {
+    "id": "m10",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Student team meeting notes:\n- Emily will draft the problem statement section.\n- Ryan to clean up the dataset and remove duplicates.\n- We should finish the slides before next week.\n- Consider adding one more baseline for comparison.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Draft the problem statement section",
+          "assignee": "Emily",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.8
+        },
+        {
+          "task": "Clean up the dataset and remove duplicates",
+          "assignee": "Ryan",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.8
+        },
+        {
+          "task": "Finish the slides",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.5
+        },
+        {
+          "task": "Add one more baseline for comparison",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Low",
+          "confidence": 0.4
+        }
+      ]
+    }
+  },
+  {
+    "id": "m11",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "Retro:\n- Good: velocity improved.\n- Bad: too many meetings.\n- Action: reduce recurring meetings.\n- Action: document decision-making process in the wiki.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Reduce recurring meetings",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Low",
+          "confidence": 0.5
+        },
+        {
+          "task": "Document decision-making process in the wiki",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Low",
+          "confidence": 0.5
+        }
+      ]
+    }
+  },
+  {
+    "id": "m12",
+    "timestamp_utc": "2026-05-07T03:40:03.771506+00:00",
+    "notes": "All-hands highlights:\n- Hiring plan approved.\n- New OKRs start next quarter.\n- Please update your team goals doc.\n- IT: migrate laptops to new MDM by end of month.",
+    "output": {
+      "action_items": [
+        {
+          "task": "Update your team goals doc",
+          "assignee": "Unassigned",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.55
+        },
+        {
+          "task": "Migrate laptops to new MDM",
+          "assignee": "IT",
+          "deadline": "None",
+          "priority": "Medium",
+          "confidence": 0.6
+        }
+      ]
+    }
+  }
+]

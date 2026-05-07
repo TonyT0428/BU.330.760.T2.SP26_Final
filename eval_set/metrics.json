@@ -1,0 +1,30 @@
+{
+  "baseline": {
+    "num_cases": 12,
+    "total_action_items": 35,
+    "avg_action_items_per_case": 2.9166666666666665,
+    "avg_confidence": 0.7628571428571428,
+    "pct_unassigned": 0.6571428571428571,
+    "pct_deadline_none": 0.8285714285714286,
+    "pct_deadline_non_iso_non_none": 0.17142857142857143,
+    "priority_counts": {
+      "High": 5,
+      "Medium": 21,
+      "Low": 9
+    }
+  },
+  "improved": {
+    "num_cases": 12,
+    "total_action_items": 33,
+    "avg_action_items_per_case": 2.75,
+    "avg_confidence": 0.6090909090909091,
+    "pct_unassigned": 0.6666666666666666,
+    "pct_deadline_none": 1.0,
+    "pct_deadline_non_iso_non_none": 0.0,
+    "priority_counts": {
+      "High": 6,
+      "Medium": 21,
+      "Low": 6
+    }
+  }
+}

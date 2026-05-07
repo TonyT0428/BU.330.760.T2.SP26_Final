@@ -1,18 +1,50 @@
 [
   {
-    "id": "q1",
-    "question": "What is RAG and why is it useful?"
+    "id": "m1",
+    "notes": "Weekly product sync (Mon):\n- Alex to send the revised Q2 roadmap deck to the client.\n- Priya will follow up with Legal about the contract redlines.\n- Decision: ship v1 without SSO.\n- Reminder: add a slide on pricing tiers."
   },
   {
-    "id": "q2",
-    "question": "Describe a typical RAG pipeline in 4-5 steps."
+    "id": "m2",
+    "notes": "Sprint planning:\n• We need the onboarding email copy updated.\n• Jordan: I'll take the database migration.\n• Target date for beta: 2026-05-20.\n• Someone should ping Design about missing icons.\n• Nice to have: explore adding a dark mode toggle."
   },
   {
-    "id": "q3",
-    "question": "What are pros and cons of TF-IDF retrieval for a RAG demo?"
+    "id": "m3",
+    "notes": "Customer call recap:\n- They reported crashes on iOS 17.2 when uploading.\n- Mia will open a bug and assign it to the mobile team.\n- Ken: can you draft a status update to send today?\n- Customer asked about SSO timeline; we said TBD."
   },
   {
-    "id": "q4",
-    "question": "How should an assistant respond when the retrieved context is insufficient?"
+    "id": "m4",
+    "notes": "Project meeting:\nTom will update the risk register.\nLet's aim to finalize requirements by end of month.\nReminder: budget review next Tuesday.\nWe discussed vendor options (A vs B) but no decision."
+  },
+  {
+    "id": "m5",
+    "notes": "Marketing standup:\n- Sara to publish the landing page edits.\n- Need to confirm webinar speaker lineup.\n- Follow up with Finance for Q3 spend approval.\n- Note: impressions are down week-over-week."
+  },
+  {
+    "id": "m6",
+    "notes": "Engineering triage:\n- Bug: API returns 500 for /checkout when cart has >50 items.\n- Chen will investigate root cause.\n- Assign QA to add a regression test.\n- If we can, ship the fix ASAP."
+  },
+  {
+    "id": "m7",
+    "notes": "Design review:\n- Update the settings screen copy to match the new terminology.\n- Add missing error states for the payment form.\n- We liked option B overall.\n- Someone should schedule a follow-up with PM + Design."
+  },
+  {
+    "id": "m8",
+    "notes": "Partnership meeting:\n- Send the draft MOU to the partner.\n- Ask partner for their data schema.\n- Evaluate whether we can support daily file drops.\n- Next check-in in two weeks."
+  },
+  {
+    "id": "m9",
+    "notes": "Ops sync:\n- Rotate on-call schedule for June.\n- Investigate why deploys are taking 25+ minutes.\n- Reminder: patching window this weekend.\n- Great job on incident response last week."
+  },
+  {
+    "id": "m10",
+    "notes": "Student team meeting notes:\n- Emily will draft the problem statement section.\n- Ryan to clean up the dataset and remove duplicates.\n- We should finish the slides before next week.\n- Consider adding one more baseline for comparison."
+  },
+  {
+    "id": "m11",
+    "notes": "Retro:\n- Good: velocity improved.\n- Bad: too many meetings.\n- Action: reduce recurring meetings.\n- Action: document decision-making process in the wiki."
+  },
+  {
+    "id": "m12",
+    "notes": "All-hands highlights:\n- Hiring plan approved.\n- New OKRs start next quarter.\n- Please update your team goals doc.\n- IT: migrate laptops to new MDM by end of month."
   }
 ]
